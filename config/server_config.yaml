@@ -1,0 +1,14 @@
+server:
+  port: 6379
+  doc_root: "./www"
+  thread_pool_size: 4
+
+logging:
+  level: info
+  filename: "logs/server.log"
+  max_size: 5242880  # 5MB
+  max_files: 3
+
+cgi:
+  enabled: true
+  timeout: 30 
