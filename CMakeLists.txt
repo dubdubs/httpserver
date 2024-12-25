@@ -13,7 +13,17 @@ find_package(yaml-cpp REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # 收集源文件
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES 
+    "${PROJECT_SOURCE_DIR}/src/*.cpp"
+)
+
+# 如果文件没有被自动收集，可以手动添加
+set(SOURCES
+    ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/HttpServer.cpp
+    ${PROJECT_SOURCE_DIR}/src/Logger.cpp
+    ${PROJECT_SOURCE_DIR}/src/Config.cpp
+)
 
 # 创建可执行文件
 add_executable(http_server ${SOURCES})

@@ -1,6 +1,7 @@
 #pragma once
 #include <spdlog/spdlog.h>
 #include <memory>
+#include <string>
 
 class Logger {
 public:
@@ -11,7 +12,8 @@ private:
     static std::shared_ptr<spdlog::logger> logger_;
 };
 
-#define LOG_INFO(...) Logger::get()->info(__VA_ARGS__)
-#define LOG_ERROR(...) Logger::get()->error(__VA_ARGS__)
-#define LOG_WARN(...) Logger::get()->warn(__VA_ARGS__)
-#define LOG_DEBUG(...) Logger::get()->debug(__VA_ARGS__) 
+// 定义日志宏
+#define LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
+#define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
+#define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
+#define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__) 
