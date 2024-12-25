@@ -4,6 +4,7 @@
 #include <thread>
 #include <functional>
 #include <netinet/in.h>
+#include <iostream>
 
 class HttpServer {
 public:

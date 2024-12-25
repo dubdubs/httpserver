@@ -2,12 +2,15 @@
 #include "Logger.h"
 #include "Config.h"
 #include <stdexcept>
+#include <system_error>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
-HttpServer::HttpServer() 
+HttpServer::HttpServer(uint16_t port) 
     : running_(false), 
       serverSocket_(-1), 
-      port_(Config::getPort()),
-      threadPool_(std::make_unique<ThreadPool>(Config::getThreadPoolSize())) {
+      port_(port) {
     
     try {
         serverSocket_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -43,15 +46,9 @@ HttpServer::HttpServer()
     }
 }
 
-void HttpServer::start() {
-    running_ = true;
-    LOG_INFO("Server starting...");
-    
-    try {
-        acceptLoop();
-    } catch (const std::exception& e) {
-        LOG_ERROR("Server error: {}", e.what());
-        stop();
+HttpServer::~HttpServer() {
+    if (serverSocket_ >= 0) {
+        close(serverSocket_);
     }
 }
 
@@ -66,10 +63,27 @@ void HttpServer::acceptLoop() {
             continue;
         }
 
-        // 创建新线程处理客户端请求
-        std::thread([this, clientSocket]() {
+        // 处理新连接
+        try {
             handleClient(clientSocket);
-        }).detach();
+        } catch (const std::exception& e) {
+            std::cerr << "Error handling client: " << e.what() << std::endl;
+            close(clientSocket);
+        }
+    }
+}
+
+void HttpServer::start() {
+    running_ = true;
+    LOG_INFO("Server starting on port {}", port_);
+    acceptLoop();
+}
+
+void HttpServer::stop() {
+    running_ = false;
+    if (serverSocket_ >= 0) {
+        close(serverSocket_);
+        serverSocket_ = -1;
     }
 }
 
