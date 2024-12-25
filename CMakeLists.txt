@@ -36,6 +36,13 @@ if(NOT spdlog_FOUND)
     FetchContent_MakeAvailable(spdlog)
 endif()
 
+# 检查C++版本并添加filesystem支持
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
+        link_libraries(stdc++fs)
+    endif()
+endif()
+
 # 创建可执行文件
 add_executable(http_server ${SOURCES})
 
@@ -45,6 +52,7 @@ target_link_libraries(http_server
     pthread
     spdlog::spdlog
     yaml-cpp
+    $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.1>>:stdc++fs>
 )
 
 # 配置文件安装
