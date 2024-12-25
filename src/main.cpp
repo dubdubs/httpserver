@@ -3,8 +3,9 @@
 #include "Config.h"
 #include <iostream>
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/base_sink.h>
+#include <spdlog/sinks/file_sinks.h>
 
 int main() {
     try {
@@ -12,14 +13,12 @@ int main() {
         std::filesystem::create_directories("logs");
 
         // 创建控制台sink
-        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
         console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [%t] %v");
 
         // 创建文件sink
-        auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-            "logs/server.log", 
-            1024 * 1024 * 5,  // 5MB
-            3                  // 保留3个文件
+        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+            "logs/server.log"
         );
         file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [%t] %v");
 
