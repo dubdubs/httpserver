@@ -2,20 +2,22 @@
 #include "Logger.h"
 #include "Config.h"
 #include <iostream>
+#include <spdlog/spdlog.h>
 
-int main(int argc, char* argv[]) {
+int main() {
     try {
+        // 初始化日志
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [%t] %v");
+        spdlog::set_level(spdlog::level::debug);
+
         // 加载配置
         Config::load("config/server_config.yaml");
         
-        // 初始化日志
-        Logger::init(Config::getLogFile());
-        
         // 创建并启动服务器
-        HttpServer server;
+        HttpServer server(6379);
         server.start();
     } catch (const std::exception& e) {
-        std::cerr << "Fatal error: " << e.what() << std::endl;
+        spdlog::error("Fatal error: {}", e.what());
         return 1;
     }
     

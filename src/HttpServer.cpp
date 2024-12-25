@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <spdlog/spdlog.h>
 
 HttpServer::HttpServer(uint16_t port) 
     : running_(false), 
@@ -36,12 +37,12 @@ HttpServer::HttpServer(uint16_t port)
             throw std::system_error(errno, std::system_category(), "Failed to listen");
         }
 
-        LOG_INFO("Server initialized on port {}", port_);
+        spdlog::info("Server initialized on port {}", port_);
     } catch (const std::exception& e) {
         if (serverSocket_ >= 0) {
             close(serverSocket_);
         }
-        LOG_ERROR("Server initialization failed: {}", e.what());
+        spdlog::error("Server initialization failed: {}", e.what());
         throw;
     }
 }

@@ -12,8 +12,8 @@ private:
     static std::shared_ptr<spdlog::logger> logger_;
 };
 
-// 定义日志宏
-#define LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
-#define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
-#define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
-#define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__) 
+// 修改日志宏定义
+#define LOG_INFO(...) spdlog::info(__VA_ARGS__)
+#define LOG_ERROR(...) spdlog::error(__VA_ARGS__)
+#define LOG_WARN(...) spdlog::warn(__VA_ARGS__)
+#define LOG_DEBUG(...) spdlog::debug(__VA_ARGS__) 

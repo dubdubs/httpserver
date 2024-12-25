@@ -25,6 +25,17 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Config.cpp
 )
 
+# 如果系统没有安装spdlog，使用FetchContent
+if(NOT spdlog_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG v1.x
+    )
+    FetchContent_MakeAvailable(spdlog)
+endif()
+
 # 创建可执行文件
 add_executable(http_server ${SOURCES})
 
