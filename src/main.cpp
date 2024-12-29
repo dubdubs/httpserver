@@ -26,26 +26,19 @@ int main() {
         auto logger = std::make_shared<spdlog::logger>("server_logger", 
             spdlog::sinks_init_list{console_sink, file_sink}
         );
-
-        // 设置全局logger
         spdlog::set_default_logger(logger);
-        spdlog::set_level(spdlog::level::debug);
 
-        logger->info("Logger initialized");
+        spdlog::info("Logger initialized");
 
         // 加载配置
         Config::load("config/server_config.yaml");
         
         // 创建并启动服务器
         HttpServer server(6379);
-        server.info("Server created");
+        spdlog::info("Server created");
         server.start();
     } catch (const std::exception& e) {
-        if (auto logger = spdlog::get("server_logger")) {
-            logger->error("Fatal error: {}", e.what());
-        } else {
-            std::cerr << "Fatal error: " << e.what() << std::endl;
-        }
+        spdlog::error("Fatal error: {}", e.what());
         return 1;
     }
     

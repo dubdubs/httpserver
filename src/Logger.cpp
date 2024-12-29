@@ -31,6 +31,8 @@ void Logger::init(const std::string& logFile) {
         // Set as default logger
         spdlog::set_default_logger(logger_);
         
+        spdlog::info("Logger initialization successful");
+        
     } catch (const spdlog::spdlog_ex& ex) {
         std::cerr << "Log initialization failed: " << ex.what() << std::endl;
         throw;
