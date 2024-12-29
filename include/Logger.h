@@ -2,7 +2,9 @@
 #include <spdlog/spdlog.h>
 #include <memory>
 #include <string>
-#include <filesystem>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 class Logger {
 public:
