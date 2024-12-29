@@ -38,7 +38,7 @@ int main() {
         
         // 创建并启动服务器
         HttpServer server(6379);
-        server->info("Server created");
+        server.info("Server created");
         server.start();
     } catch (const std::exception& e) {
         if (auto logger = spdlog::get("server_logger")) {
