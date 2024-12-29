@@ -1,12 +1,10 @@
 #include "HttpServer.h"
-#include "Logger.h"
 #include "Config.h"
 #include <stdexcept>
 #include <system_error>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <spdlog/spdlog.h>
 
 HttpServer::HttpServer(uint16_t port) 
     : running_(false), 
@@ -37,12 +35,12 @@ HttpServer::HttpServer(uint16_t port)
             throw std::system_error(errno, std::system_category(), "Failed to listen");
         }
 
-        spdlog::info("Server initialized on port {}", port_);
+        std::cout << "Server initialized on port " << port_ << std::endl;
     } catch (const std::exception& e) {
         if (serverSocket_ >= 0) {
             close(serverSocket_);
         }
-        spdlog::error("Server initialization failed: {}", e.what());
+        std::cerr << "Server initialization failed: " << e.what() << std::endl;
         throw;
     }
 }
@@ -76,7 +74,7 @@ void HttpServer::acceptLoop() {
 
 void HttpServer::start() {
     running_ = true;
-    LOG_INFO("Server starting on port {}", port_);
+    std::cout << "Server starting on port " << port_ << std::endl;
     acceptLoop();
 }
 
